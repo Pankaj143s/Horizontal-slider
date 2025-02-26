@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const sliderSection = document.getElementById('sliderSection');
     if (!sliderSection) return;
 
-    // Ensure the slider starts scrolled to the far left (showing left buffer)
+    // Start with the slider scrolled to the far left (showing left buffer)
     sliderSection.scrollLeft = 0;
 
     // Track if the slider is fully in view using IntersectionObserver.
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
         entries.forEach(entry => {
             sliderInView = entry.isIntersecting;
         });
-    }, { threshold: 1 });
+    }, { threshold: 1 }); // Require full visibility
     observer.observe(sliderSection);
 
     // --- Desktop (Wheel) Inertia Scrolling ---
@@ -24,12 +24,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!sliderInView) return;
 
         const maxScroll = sliderSection.scrollWidth - sliderSection.clientWidth;
-        // Allow vertical scroll at boundaries.
+        // Allow vertical scroll if at boundaries.
         if ((sliderSection.scrollLeft <= 0 && e.deltaY < 0) ||
             (sliderSection.scrollLeft >= maxScroll && e.deltaY > 0)) {
             return;
         }
-
         e.preventDefault();
         currentVelocity += e.deltaY;
         if (!animationFrameId) {
@@ -62,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function () {
     let touchStartY = null;
     let touchStartSliderScroll = null;
 
-    // Listen globally so that touch swipes anywhere trigger the slider if in view.
     window.addEventListener('touchstart', function (e) {
         if (!sliderInView) return;
         touchStartY = e.touches[0].clientY;
@@ -75,12 +73,21 @@ document.addEventListener('DOMContentLoaded', function () {
         const diffY = touchStartY - touchCurrentY;
         const maxScroll = sliderSection.scrollWidth - sliderSection.clientWidth;
         const newScrollLeft = touchStartSliderScroll + diffY;
-        // If new scroll position is out-of-bounds, allow vertical scrolling.
+
+        // If the new position would be out of bounds, clamp it
         if (newScrollLeft < 0 || newScrollLeft > maxScroll) {
+            sliderSection.scrollLeft = (newScrollLeft < 0) ? 0 : maxScroll;
+            // Clear the touch start values so subsequent events are not captured,
+            // allowing the browser to resume vertical scrolling.
+            touchStartY = null;
+            touchStartSliderScroll = null;
+            // Do not call preventDefault so that vertical scroll occurs.
             return;
         }
+
+        // Otherwise, update horizontal scroll and prevent vertical scrolling.
         sliderSection.scrollLeft = newScrollLeft;
-        e.preventDefault(); // Prevent vertical scrolling while moving horizontally.
+        e.preventDefault();
     }, { passive: false });
 
     window.addEventListener('touchend', function (e) {

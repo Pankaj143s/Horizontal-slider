@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log("IntersectionObserver triggered. entry.isIntersecting =", entry.isIntersecting);
             sliderInView = entry.isIntersecting;
         });
-    }, { threshold: 0.8 }); // Lower threshold for easier debugging
+    }, { threshold: 1 }); // Lower threshold for easier debugging
     observer.observe(sliderSection);
 
     // Inertia scrolling variables

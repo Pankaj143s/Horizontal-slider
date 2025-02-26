@@ -2,33 +2,33 @@ document.addEventListener('DOMContentLoaded', function () {
     const sliderSection = document.getElementById('sliderSection');
     if (!sliderSection) return;
 
-    // Start with the slider scrolled to the far left (showing left buffer)
+    // Ensure the slider starts scrolled to the far left.
     sliderSection.scrollLeft = 0;
 
-    // Track if the slider is in view using IntersectionObserver.
+    // Track if the slider is fully in view.
     let sliderInView = false;
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             sliderInView = entry.isIntersecting;
-            // For debugging: console.log("IntersectionObserver:", entry.isIntersecting);
+            // For debugging:
+            // console.log("IntersectionObserver: isIntersecting =", entry.isIntersecting, "intersectionRatio =", entry.intersectionRatio);
         });
-    }, { threshold: 1 });
+    }, { threshold: 1 }); // Entire slider must be in view.
     observer.observe(sliderSection);
 
-    // Inertia scrolling variables for desktop (wheel)
+    // --- Desktop (Wheel) Inertia Scrolling ---
     let currentVelocity = 0;
     let animationFrameId = null;
     const friction = 0.95;
     const velocityThreshold = 0.5;
 
-    // Desktop: Listen for wheel events
     window.addEventListener('wheel', function (e) {
-        // Only hijack scroll if slider is in view.
+        // Only hijack if slider is in view.
         if (!sliderInView) return;
 
         const maxScroll = sliderSection.scrollWidth - sliderSection.clientWidth;
 
-        // Allow vertical scroll at boundaries.
+        // If we're at the boundaries, allow vertical scrolling.
         if ((sliderSection.scrollLeft <= 0 && e.deltaY < 0) ||
             (sliderSection.scrollLeft >= maxScroll && e.deltaY > 0)) {
             return;
@@ -62,29 +62,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Mobile: Touch event support for horizontal swiping
-    let touchStartX = null;
-    let touchStartScrollLeft = null;
-    sliderSection.addEventListener('touchstart', function (e) {
-        // Record starting X position and current scrollLeft
-        touchStartX = e.touches[0].clientX;
-        touchStartScrollLeft = sliderSection.scrollLeft;
-    }, { passive: true });
+    // --- Mobile (Global Touch) Handling ---
+    let touchStartY = null;
+    let touchStartSliderScroll = null;
+    window.addEventListener('touchstart', function (e) {
+        // If the slider is in view, capture the touch.
+        if (!sliderInView) return;
+        touchStartY = e.touches[0].clientY;
+        touchStartSliderScroll = sliderSection.scrollLeft;
+    }, { passive: false });
 
-    sliderSection.addEventListener('touchmove', function (e) {
-        if (touchStartX === null) return;
-        // Calculate the horizontal difference
-        let currentX = e.touches[0].clientX;
-        let diffX = touchStartX - currentX;
-        // Update scroll position accordingly
-        sliderSection.scrollLeft = touchStartScrollLeft + diffX;
-        // Prevent vertical scroll while swiping horizontally
+    window.addEventListener('touchmove', function (e) {
+        if (!sliderInView || touchStartY === null) return;
+        const touchCurrentY = e.touches[0].clientY;
+        const diffY = touchStartY - touchCurrentY;
+        // Update horizontal scroll based on vertical swipe.
+        sliderSection.scrollLeft = touchStartSliderScroll + diffY;
         e.preventDefault();
     }, { passive: false });
 
-    sliderSection.addEventListener('touchend', function (e) {
-        // Reset touch start variables
-        touchStartX = null;
-        touchStartScrollLeft = null;
+    window.addEventListener('touchend', function (e) {
+        touchStartY = null;
+        touchStartSliderScroll = null;
     });
 });

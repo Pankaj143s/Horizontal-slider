@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- IMPORTANT: Ensures proper responsive behavior on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Horizontal Slider with Scroll Hijack</title>
+
+    <!-- Optional Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Link to our CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Simulate tall content BEFORE the slider -->
+    <div style="height: 1000px; background: #eee">
+      <h1 style="text-align: center; padding-top: 100px">
+        Scroll Down to See Horizontal Slider
+      </h1>
+    </div>
+
+    <!-- Horizontal Slider Section -->
+    <section class="slider-section" id="sliderSection">
+      <div class="slider-track" id="sliderTrack">
+        <!-- Empty Buffer Slide at Start -->
+        <div class="slide empty-slide"></div>
+
+        <!-- Real Slides (p elements removed) -->
+        <div class="slide">
+          <img src="./assets/Pi1.png" alt="Organic Protection" />
+        </div>
+        <div class="slide">
+          <img src="./assets/Pi2.png" alt="Tested & Proven" />
+        </div>
+        <div class="slide">
+          <img src="./assets/P1.png" alt="No Side Effects" />
+        </div>
+        <div class="slide">
+          <img src="./assets/P5.png" alt="Safe for All" />
+        </div>
+        <div class="slide">
+          <img src="./assets/P3.png" alt="Join Movement" />
+        </div>
+        <div class="slide">
+          <img src="./assets/P1.png" alt="Extra Protection" />
+        </div>
+
+        <!-- Empty Buffer Slide at End -->
+        <div class="slide empty-slide"></div>
+      </div>
+    </section>
+    <!-- End Horizontal Slider Section -->
+
+    <!-- Simulate tall content AFTER the slider -->
+    <div style="height: 1000px; background: #ccc">
+      <h1 style="text-align: center; padding-top: 100px">
+        You Reached the End (Scroll Up to Test Reverse)
+      </h1>
+    </div>
+
+    <!-- Link to external JS -->
+    <script src="script.js"></script>
+  </body>
+</html>

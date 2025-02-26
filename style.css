@@ -1,0 +1,117 @@
+:root {
+  /* Original Gradient Colors */
+  --bg-color-start: #8f9cc5;
+  --bg-color-end: #e6e9f0;
+
+  /* Slide dimensions */
+  --slide-width: 300px;
+  --slide-margin: 10px;
+  --buffer-width: 150px; /* Width for empty buffer slides */
+}
+
+/* Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+/* ---------- Default (Mobile) Styles ---------- */
+.slider-section {
+  position: relative;
+  width: 100%;
+  height: 300px; /* Mobile height */
+  overflow: hidden;
+  scroll-behavior: smooth;
+  background: linear-gradient(
+    135deg,
+    var(--bg-color-start),
+    var(--bg-color-end)
+  );
+  background-repeat: no-repeat;
+  background-size: 110% 110%;
+  background-position: center;
+}
+
+.slider-track {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.slide {
+  flex: 0 0 auto;
+  margin: 0 var(--slide-margin);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 220px;
+  max-width: 220px;
+}
+
+/* Empty buffer slides at start/end */
+.empty-slide {
+  min-width: var(--buffer-width);
+  max-width: var(--buffer-width);
+  background: transparent;
+}
+
+/* 
+   Force all images to a uniform size/ratio.
+   Adjust width/height as desired.
+*/
+.slide img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}
+
+/* ---------- Tablet (min-width: 481px) ---------- */
+@media (min-width: 481px) {
+  .slider-section {
+    height: 350px !important;
+  }
+  .slide {
+    min-width: 260px;
+    max-width: 260px;
+  }
+  .slide img {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+/* ---------- Laptop (min-width: 769px) ---------- */
+@media (min-width: 769px) {
+  .slider-section {
+    height: 300px !important;
+  }
+  .slide {
+    min-width: 280px;
+    max-width: 280px;
+  }
+  .slide img {
+    width: 240px;
+    height: 240px;
+  }
+}
+
+/* ---------- Larger Screens (min-width: 1025px) ---------- */
+@media (min-width: 1025px) {
+  .slider-section {
+    height: 400px;
+  }
+  .slide {
+    min-width: var(--slide-width);
+    max-width: var(--slide-width);
+  }
+  .slide img {
+    width: 280px;
+    height: 280px;
+  }
+}

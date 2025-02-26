@@ -54,17 +54,14 @@ body {
   max-width: 220px;
 }
 
-/* Empty buffer slides at start/end */
+/* Empty buffer slides */
 .empty-slide {
   min-width: var(--buffer-width);
   max-width: var(--buffer-width);
   background: transparent;
 }
 
-/* 
-   Force all images to a uniform size/ratio.
-   Adjust width/height as desired.
-*/
+/* Force all images to a uniform size/ratio */
 .slide img {
   width: 200px;
   height: 200px;
